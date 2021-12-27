@@ -1,0 +1,20 @@
+@charset "utf-8";
+
+/* 고객 주문 페이지의 폰트 관련 스타일 */
+
+html, body {
+  font-size: 1vh;
+}
+
+body { font-family: 'Noto Sans KR', sans-serif; }
+.amp { font-family: 'Questrial', sans-serif; }
+.que { font-family: 'Staatliches', cursive; }
+
+.p1 { font-size: 5rem; }
+.p2 { font-size: 3.3rem; }
+.p3 { font-size: 2.5rem; }
+.p4 { font-size: 2.0rem; }
+.p5 { font-size: 1.8rem; }
+.p6 { font-size: 1.3rem; }
+
+.bold { font-weight: 700; }

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <title>McDonald's Kiosk</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="ScreenOrientation" content="autoRotate:disabled">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Questrial&family=Staatliches&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/color.css">
+  <link rel="stylesheet" type="text/css" href="css/font.css">
+  <script defer type="text/javascript" src="js/sales-management.js"></script>
+
+
+  <!-- Chrome, Safari, IE -->
+  <link rel="shortcut icon" href="img/favi.ico">
+
+  <!-- Firefox, Opera (Chrome and Safari say thanks but no thanks) -->
+  <link rel="icon" href="img/favi.png">
+</head>
+
+<body>
+  <!--[ Warning ]-->
+  <div class="warning p2 bold">
+    최소 높이가 715px 이상인 브라우저에서 실행해주세요.
+  </div>
+  <!-- <div class="admin-popup admin-popup--out">
+    <div class="admin-popup__contents">
+      <div class="admin-popup__btns">
+        <div class="btn red-btn p4" onclick="" >
+          환불
+        </div>
+        <div class="btn green-btn p4" onclick="closeAdminPopup()">
+          확인
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- [ Kiosk Screen] -->
+  <section class="kiosk-screen full-width admin">
+
+    <p class="admin__title p2 bold">
+      매출 관리
+    </p>
+
+    <div class="admin__management">
+      <input class="admin__prev-month p3" type="button" onclick="getPrevMonth();" value="◀"/>
+      <input class="admin__next-month p3" type="button" onclick="getNextMonth();" value="▶"/>
+      <div class="admin__calendar-title p3 bold"></div>
+
+      <br />
+      <div class="admin__sales-day p5 bold">
+        <div>일</div>
+        <div>월</div>
+        <div>화</div>
+        <div>수</div>
+        <div>목</div>
+        <div>금</div>
+        <div>토</div>
+      </div>
+
+      <div class="admin__date-container p5"></div>
+    </div>
+
+      <!--[ Footer ]-->
+      <div class="admin__footer full-width">
+        <div class="admin__footer--btns center-align">
+          <div class="btn white-red-btn center-align p4" onclick="history.go(-1)">
+            이전으로
+          </div>
+          <div class="btn white-green-btn center-align p4" onclick="location.href = '../';">
+            주문 페이지
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!--[ DB(hide) ]-->
+  <div class="DBscript-container">
+    <script type="text/javascript">
+      'use strict';
+
+      let db;
+
+
+      // WebSQL DB load
+      const openDB = (function() {
+        if (!window.openDatabase) {
+          console.log('Not support Web SQL');
+        } else {
+          let name = 'kiosk';
+          let version = '1.0';
+          let dsecription = 'HUFS DB team dbdb_deep WebSQL DB';
+          let size = 2 * 1024 * 1024;
+          db = openDatabase(name, version, dsecription, size);
+        }
+      })();
+
+      // openDB();
+
+      // DB 관련 스크립트가 프론트엔드 상에 노출 안되도록 제거
+      // document.body.removeChild(document.querySelector('.DBscript-container'));
+    </script>
+  </div>
+</body>
+
+</html>

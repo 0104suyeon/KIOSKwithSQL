@@ -1,0 +1,33 @@
+@charset 'utf-8';
+
+/*
+ * 상품 관련 이미지 스타일
+ */
+
+.stand-by-popup > .promotion-img {
+  background: url("../img/promotion-img.png") center center / cover no-repeat;
+}
+
+.main__banner--slide1 {
+  background: url("../img/banner/slide1.png") center center / cover no-repeat;
+}
+
+.main__banner--slide2 {
+  background: url("../img/banner/slide2.png") center center / cover no-repeat;
+}
+
+.main__banner--slide3 {
+  background: url("../img/banner/slide3.png") center center / cover no-repeat;
+}
+
+.category__contents--thumb {
+  background: url("../img/null.png") center center / contain no-repeat;
+}
+
+.product__img {
+  background: url("../img/null.png") center center / cover no-repeat;
+}
+
+.option__img {
+  background: url("../img/null.png") center center / contain no-repeat;
+}

@@ -1,0 +1,88 @@
+@charset "utf-8";
+
+/* 고객 주문 페이지의 색상 관련 스타일 */
+.kiosk-screen,
+.main__products,
+.main__banner,
+.main__cart--container,
+.main__products--nav,
+.category__contents,
+.main__products--product > .product-set > .product-set__box1,
+.main__products--product > .product-set > .product-set__box2,
+.main__products--product > .product-set > .product-set__box3,
+.main__component,
+.main__covering,
+.payment-popup .popup__guide {
+  background-color: #FFFFFF;
+}
+
+.stand-by-popup, .popup__takeout-desc, .popup__order-desc, .main__cart--title, .main__footer--btns > .btn, .green-btn, .popup__description, .admin__title {
+  color: #FFFFFF;
+}
+
+.category__contents--selected {
+  background: linear-gradient(#E5E5E5, #FAFAFA);
+}
+
+.btn {
+  background-color: #FFFFFF;
+  color: #11410F;
+}
+
+.green-btn {
+  background-color: #11410F;
+  color: #FFFFFF;
+}
+
+.red-btn, .payment-popup .guide__title {
+  background-color: #C03A45;
+  color: #FFFFFF;
+}
+
+.white-green-btn {
+  background-color: #ffffff;
+  color: #11410F;
+}
+
+.white-red-btn {
+  background-color: #ffffff;
+  color: #C03A45;
+}
+
+.popup__takeout-btns > .btn,
+.popup__payment-step2 .guide__description,
+.admin__category-selector > p, .admin__category-table a,
+.admin-popup__product-form span, .admin__sales-day > div:first-child,
+.admin__date-sel:nth-child(7n+1) {
+  color: #C03A45;
+}
+
+.admin__date-sel {
+  border: 1px solid #EEEEEE;
+}
+
+.admin__date-sel--deactivated {
+  background-color: #EEEEEE;
+}
+
+.popup, .main__cart--title, .admin {
+  background-color: #11410F;
+}
+
+.order-list__unit, .admin-popup__contents  {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+.main__footer {
+  background-color: #D8D3D0;
+}
+
+.warning {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.admin__management {
+  background-color: #FFFFFF;
+}

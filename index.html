@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <title>McDonald's Kiosk</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="ScreenOrientation" content="autoRotate:disabled">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Questrial&family=Staatliches&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/image.css">
+  <link rel="stylesheet" type="text/css" href="css/color.css">
+  <link rel="stylesheet" type="text/css" href="css/font.css">
+  <link rel="stylesheet" type="text/css" href="css/custom-cursor.css">
+  <script defer type="text/javascript" src="js/touch.js"></script>
+  <script defer type="text/javascript" src="js/banner.js"></script>
+  <script defer type="text/javascript" src="js/product.js"></script>
+  <script defer type="text/javascript" src="js/category.js"></script>
+  <script defer type="text/javascript" src="js/payment.js"></script>
+  <script defer type="text/javascript" src="js/onload.js"></script>
+  <!-- NOT SUPPORT IN LOCAL WEB -->
+  <!-- <script async type="text/javascript" src="js/set-item.js"></script> -->
+
+  <!-- Chrome, Safari, IE -->
+  <link rel="shortcut icon" href="img/favi.ico">
+
+  <!-- Firefox, Opera (Chrome and Safari say thanks but no thanks) -->
+  <link rel="icon" href="img/favi.png">
+</head>
+
+<body>
+  <!--[ Warning ]-->
+  <div class="warning p2 bold">
+    최소 높이가 715px 이상인 브라우저에서 실행해주세요.
+  </div>
+
+  <!-- [ Kiosk Screen] -->
+  <section class="kiosk-screen full-width">
+    <!--[ Popup-1 ]-->
+    <div class="popup stand-by-popup full-width">
+      <div class="promotion-img">
+      </div>
+      <div class="popup__desc p5">
+          * 현금 결제는 카운터에서만 가능 <br />
+          &nbsp;&nbsp;Please pay at Front Counter for Cash
+      </div>
+      <div class="popup__start center-align p2 bold">
+        <img src="img/logo.png" /> 주문하시려면 터치하세요
+      </div>
+    </div>
+
+    <!--[ Popup-2 ]-->
+    <div class="popup take-out-popup full-width">
+      <img src="img/logo.png" />
+      <p class="popup__takeout-desc popup__takeout-desc--out p3">
+        식사하실 장소를 선택해 주세요
+      </p>
+      <div class="popup__takeout-btns center-align popup__takeout-btns--out">
+        <div class="btn btn--for-here" id="for-here">
+          <img src="img/bigmc.png" />
+          <p class="p3 bold">
+            매장에서 식사
+          </p>
+        </div>
+        <div class="btn btn--take-out" id="take-out">
+          <img src="img/paperbag.png" />
+          <p class="p3 bold">
+            포장 주문
+          </p>
+        </div>
+      </div>
+      <div class="popup__takeout-footer center-align full-width popup__takeout-footer--out">
+        <div class="btn btn--blank"></div>
+
+        <div class="btn btn--admin p4" onclick="location.href='./admin.html';">
+          관리자 페이지
+        </div>
+      </div>
+    </div>
+
+    <!--[ Popup-3 ]-->
+    <div class="popup confirm-order-popup full-width" style="display: none;">
+      <img class="popup__logo" src="img/logo.png" />
+      <p class="popup__description p3">
+        주문을 확인하세요 <span class="popup__total-price"></span>
+      </p>
+      <div class="popup__order-list p4"></div>
+      <div class="popup__footer center-align">
+        <div class="btn white-red-btn center-align p4" onclick="cancelConfirm();">
+          이전
+        </div>
+        <div class="btn white-green-btn center-align p4" onclick="goPayment();">
+          결제하기
+        </div>
+      </div>
+    </div>
+
+    <!--[ Popup-4 ]-->
+    <div class="popup payment-popup full-width" style="display: none;">
+      <!--[ Order Data Form ]-->
+      <!-- ***************** 폼 수정 *************** -->
+      <!-- <form class="popup__order-form" charset="utf-8" action="./" method="POST" target="disable_redirect"></form>
+      <iframe name="disable_redirect" style="display:none"></iframe> -->
+
+      <img class="popup__logo" src="img/logo.png" />
+      <div class="popup__payment-step1 full-width">
+        <p class="popup__description p3">
+          아래 설명에 따라 결제를 진행하세요
+        </p>
+        <div class="popup__guide p4"  onclick="inputCard();">
+          <p class="guide__title">
+            IC신용/체크카드 사용시
+          </p>
+          <div class="guide__description">
+            카드를 화살표 방향으로 투입구에 넣어주세요<br />
+            결제 오류 시, 카드를 긁어주세요<br />
+            (해당 영역 터치 시 카드를 투입한 것으로 인식하며<br />
+            10초 이상 동작이 없을 시 초기 화면으로 돌아갑니다)
+          </div>
+          <img class="guide__img" src="img/card-module.png" />
+        </div>
+      </div>
+      <div class="popup__payment-step2 full-width">
+        <p class="popup__description p3">
+          결제 완료
+        </p>
+        <div class="popup__guide p3">
+          <img class="guide__img" src="img/card.png" />
+          <div class="guide__description">
+            ✔ 결제가 완료되었습니다.
+          </div>
+        </div>
+      </div>
+      <div class="popup__payment-step3 full-width">
+        <p class="popup__description p3">
+          주문번호는 <span class="popup__order-code"></span>입니다.<br />
+          주문번호 표가 출력될 예정입니다.
+        </p>
+      </div>
+    </div>
+
+    <!--[ Main ]-->
+    <div class="main">
+      <div class="main__banner">
+        <div class="main__banner--slide1 slide slide--wait full-width"></div>
+        <div class="main__banner--slide2 slide slide--wait full-width"></div>
+        <div class="main__banner--slide3 slide slide--out full-width"></div>
+      </div>
+
+      <!--[ Order ]-->
+      <div class="main__order main__order--out" style="display: none;">
+        <div class="main__order--nav">
+          <div class="main__order--img center-align"></div>
+          <div class="main__order--description p4"></div>
+        </div>
+        <div class="main__order--contents">
+          <div class="main__order--combo-group1"></div>
+          <div class="main__order--combo-group2"></div>
+        </div>
+        <div class="main__order--footer center-align">
+          <div class="btn red-btn p4" onclick="endOrder();">
+            취소
+          </div>
+          <div class="btn green-btn p4" onclick="addCart(null, togglePriceNotation(document.querySelector('.main__order--price').innerHTML));">
+            장바구니 추가
+          </div>
+        </div>
+      </div>
+
+      <!--[ Category & Product ]-->
+      <div class="main__products full-width">
+        <div class="main__products--nav">
+          <div class="main__products--logo">
+            <img src="img/logo.png" />
+          </div>
+          <div class="main__products--btns">
+            <div class="btn btn--small green-btn p4" onclick="location.reload();">
+              이전
+            </div>
+          </div>
+          <div class="main__products--title p3">버거</div>
+        </div>
+        <div class="main__products--contents">
+          <div class="main__products--category-container category--mouse-stop"></div>
+          <div class="main__products--product"></div>
+        </div>
+      </div>
+
+      <!--[ Component ]-->
+      <div class="main__component component--out">
+        <div class="component__nav center-align">
+          <div class="component__description p4">
+            &nbsp;&nbsp;원하시는 구성을 선택해주세요&nbsp;&nbsp;
+          </div>
+          <div class="btn btn--small red-btn center-align p4" onclick="endComponent();">
+            취소
+          </div>
+        </div>
+        <div class="component__contents"></div>
+      </div>
+      <div class="main__covering covering--out"></div>
+
+      <!--[ Cart ]-->
+      <div class="main__cart">
+        <div class="main__cart--title">
+          <div class="p4">
+            주문 내역
+          </div>
+        </div>
+        <div class="main__cart--container main__cart--empty center-align p4">
+          장바구니가 비어있습니다
+        </div>
+      </div>
+
+      <!--[ Footer ]-->
+      <div class="main__footer">
+        <div class="main__footer--btns center-align">
+          <div class="btn red-btn center-align p4" onclick="location.reload();">
+            주문 취소
+          </div>
+          <div class="btn green-btn center-align p4" onclick="confirmOrder();">
+            주문 완료
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!--[ DB(hide) ]-->
+  <div class="DBscript-container">
+    <script type="text/javascript">
+    /* https://romeoh.tistory.com/entry/Chrome-Web-SQL-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0 */
+    /* Web SQL이란? ... -> 내장 DB인 Sqlite 기반 */
+      'use strict';
+
+
+
+      let db;
+      // let lastOrderNo;
+      // let lastOrderCode;
+      // let lastOrderDate;
+      // let lastItemNo;
+
+      // WebSQL 초기화
+      const openDB = function() {
+        if (!window.openDatabase) {
+          console.log('Not support Web SQL');
+        } else {
+          let name = 'kiosk';
+          let version = '1.0';
+          let dsecription = 'HUFS DB team dbdb_deep WebSQL DB';
+          let size = 2 * 1024 * 1024;
+          db = openDatabase(name, version, dsecription, size);
+        }
+      };
+
+
+      // 페이지를 새로 열거나 새로고침을 키오스크 기기 부팅 & 재부팅으로 가정
+      // 테이블 데이터와 구조를 초기화
+      const initTable = function() {
+        db.transaction(function(tx) {
+          tx.executeSql(`DROP TABLE IF EXISTS CATEGORY`);
+          tx.executeSql(`DROP TABLE IF EXISTS CATEGORIZATION`);
+          tx.executeSql(`DROP TABLE IF EXISTS PRODUCT`);
+          tx.executeSql(`DROP TABLE IF EXISTS OPTION`);
+          tx.executeSql(`DROP TABLE IF EXISTS SET_PRODUCT`);
+          tx.executeSql(`DROP TABLE IF EXISTS ORDERS`);
+          tx.executeSql(`DROP TABLE IF EXISTS ORDER_HISTORY`);
+        },
+        function(error) {
+          console.log(error);
+        });
+      };
+
+      // 초기화된 데이터베이스에 테이블 추가하기
+      const createTable = function() {
+        db.transaction(function(tx) {
+          tx.executeSql(`
+            CREATE TABLE IF NOT EXISTS CATEGORY (
+                category_no INTEGER NOT NULL,
+                category_name VARCHAR(30) NOT NULL,
+                category_img VARCHAR(30) NOT NULL,
+                PRIMARY KEY (category_no)
+            );
+          `);
+
+          tx.executeSql(`
+            CREATE TABLE IF NOT EXISTS PRODUCT (
+                product_no INTEGER NOT NULL,
+                product_name VARCHAR(30) NOT NULL,
+                price INTEGER NOT NULL,
+                product_img VARCHAR(30) NOT NULL,
+                is_sale TINYINT NOT NULL,
+                PRIMARY KEY (product_no)
+            );
+          `);
+
+          tx.executeSql(`
+            CREATE TABLE IF NOT EXISTS SET_PRODUCT (
+            	set_no INTEGER NOT NULL,
+            	set_name VARCHAR(30) NOT NULL,
+            	additional_price INTEGER NOT NULL,
+            	set_img VARCHAR(30) NOT NULL,
+            	PRIMARY KEY (set_no)
+            );
+          `);
+
+          tx.executeSql(`
+            CREATE TABLE IF NOT EXISTS ORDER_HISTORY (
+                order_id CHAR(12) NOT NULL,
+                order_date DATETIME NOT NULL,
+                is_takeout TINYINT NOT NULL,
+                PRIMARY KEY (order_id)
+            );
+          `);
+
+          tx.executeSql(`
+            CREATE TABLE IF NOT EXISTS CATEGORIZATION (
+              product_no INTEGER NOT NULL,
+              category_no INTEGER NOT NULL,
+              FOREIGN KEY (product_no) REFERENCES PRODUCT (product_no)
+                  ON DELETE CASCADE
+                  ON UPDATE CASCADE,
+              FOREIGN KEY (category_no) REFERENCES CATEGORY (category_no)
+                  ON DELETE CASCADE
+                  ON UPDATE CASCADE
+            );
+          `);
+
+          tx.executeSql(`
+            CREATE TABLE IF NOT EXISTS OPTION (
+                set_no INTEGER NOT NULL,
+                product_no INTEGER NOT NULL,
+                FOREIGN KEY (product_no) REFERENCES PRODUCT(product_no)
+                  ON DELETE CASCADE
+                  ON UPDATE CASCADE,
+                FOREIGN KEY (set_no) REFERENCES SET_PRODUCT(set_no)
+                  ON DELETE CASCADE
+                  ON UPDATE CASCADE
+            );
+          `);
+
+          tx.executeSql(`
+            CREATE TABLE IF NOT EXISTS ORDERS (
+                order_id INTEGER NOT NULL,
+                set_no INTEGER NOT NULL,
+                quantity INTEGER NOT NULL,
+                FOREIGN KEY (order_id) REFERENCES ORDER_HISTORY(order_id)
+                  ON DELETE CASCADE
+                  ON UPDATE CASCADE,
+                FOREIGN KEY (set_no) REFERENCES SET_PRODUCT(set_no)
+                  ON DELETE CASCADE
+                  ON UPDATE CASCADE
+            );
+          `);
+        },
+        function(error) {
+          console.log(error);
+        });
+      };
+
+      // 데이터가 유효한지 체크
+      // const checkData = function() {
+      //   db.transaction(function(tx) {
+      //     let checkTableNames = ["CATEGORY", "PRODUCT", "SET_OPTION", "SET_PRODUCT"];
+      //
+      //     for (const tableName of checkTableNames) {
+      //
+      //     }
+      //   });
+      //   return true
+      // }
+
+      // 데이터가 비어있는 경우 기본 품목으로 구성된 데이터 삽입
+      const insertData = function() {
+        // https://stackoverflow.com/questions/27113200/inserting-multiple-records-into-a-websql-table-using-single-query-data-from-arr
+
+        db.transaction(function(tx) {
+          tx.executeSql(`
+            SELECT * FROM CATEGORY
+          `, [], function(tx, res) {
+            if (res.rows.length === 0) {
+              const CATEGORY = [
+                {category_no: 1, category_name: '버거', category_img: './img/category/category_no1.png'},
+                {category_no: 2, category_name: '사이드', category_img: './img/category/category_no2.png'},
+                {category_no: 3, category_name: '음료', category_img: './img/category/category_no3.png'},
+                {category_no: 4, category_name: '디저트', category_img: './img/category/category_no4.png'},
+                {category_no: 5, category_name: '맥카페', category_img: './img/category/category_no5.png'},
+                {category_no: 6, category_name: '소스', category_img: './img/category/category_no6.png'},
+              ];
+
+              for (let i in CATEGORY) {
+                tx.executeSql(`INSERT INTO CATEGORY VALUES(?, ?, ?)`, [
+                  CATEGORY[i].category_no, CATEGORY[i].category_name, CATEGORY[i].category_img
+                ]);
+              }
+            }
+          });
+
+          tx.executeSql(`
+            SELECT * FROM PRODUCT
+          `, [], function(tx, res) {
+            if (res.rows.length === 0) {
+              const PRODUCT = [
+                {product_no: 1, product_name: '케이준 맥치킨', price: 4000, product_img: './img/product/product_no1.png', is_sale: 1},
+                {product_no: 2, product_name: '슈비버거', price: 6200, product_img: './img/product/product_no2.png', is_sale: 1},
+                {product_no: 3, product_name: '슈슈버거', price: 5000, product_img: './img/product/product_no3.png', is_sale: 1},
+                {product_no: 4, product_name: '1955 버거™', price: 6200, product_img: './img/product/product_no4.png', is_sale: 1},
+                {product_no: 5, product_name: '맥치킨®', price: 4000, product_img: './img/product/product_no5.png', is_sale: 0},
+                {product_no: 6, product_name: '맥치킨® 모짜렐라', price: 5400, product_img: './img/product/product_no6.png', is_sale: 0},
+                {product_no: 7, product_name: '빅맥®', price: 5200, product_img: './img/product/product_no7.png', is_sale: 1},
+                {product_no: 8, product_name: '맥스파이시® 상하이버거', price: 5200, product_img: './img/product/product_no8.png', is_sale: 1},
+                {product_no: 9, product_name: '더블 불고기 버거', price: 5100, product_img: './img/product/product_no9.png', is_sale: 1},
+                {product_no: 10, product_name: '에그 불고기 버거', price: 4000, product_img: './img/product/product_no10.png', is_sale: 1},
+                {product_no: 11, product_name: '불고기 버거', price: 2700, product_img: './img/product/product_no11.png', is_sale: 1},
+                {product_no: 12, product_name: '베이컨 토마토 디럭스™', price: 6000, product_img: './img/product/product_no12.png', is_sale: 1},
+                {product_no: 13, product_name: '더블 쿼터파운더™ 치즈', price: 7600, product_img: './img/product/product_no13.png', is_sale: 1},
+                {product_no: 14, product_name: '쿼터파운더™ 치즈', price: 5700, product_img: './img/product/product_no14.png', is_sale: 1},
+                {product_no: 15, product_name: '1955 해쉬브라운', price: 6700, product_img: './img/product/product_no15.png', is_sale: 1},
+                {product_no: 16, product_name: '치즈버거', price: 2900, product_img: './img/product/product_no16.png', is_sale: 1},
+                {product_no: 17, product_name: '더블 치즈버거', price: 5100, product_img: './img/product/product_no17.png', is_sale: 1},
+                {product_no: 18, product_name: '햄버거', price: 2700, product_img: './img/product/product_no18.png', is_sale: 1},
+                {product_no: 19, product_name: '웨지 후라이', price: 2800, product_img: './img/product/product_no19.png', is_sale: 1},
+                {product_no: 20, product_name: '골든 모짜렐라 치즈스틱', price: 2700, product_img: './img/product/product_no20.png', is_sale: 1},
+                {product_no: 21, product_name: '맥스파이시® 치킨텐더', price: 3200, product_img: './img/product/product_no21.png', is_sale: 1},
+                {product_no: 22, product_name: '상하이 치킨 스낵랩', price: 2700, product_img: './img/product/product_no22.png', is_sale: 1},
+                {product_no: 23, product_name: '후렌치 후라이', price: 1700, product_img: './img/product/product_no23.png', is_sale: 1},
+                {product_no: 24, product_name: '스트링 치즈', price: 2300, product_img: './img/product/product_no24.png', is_sale: 1},
+                {product_no: 25, product_name: '타로 파이', price: 1000, product_img: './img/product/product_no25.png', is_sale: 1},
+                {product_no: 26, product_name: '오레오 맥플러리®', price: 3200, product_img: './img/product/product_no26.png', is_sale: 1},
+                {product_no: 27, product_name: '애플 파이', price: 1700, product_img: './img/product/product_no27.png', is_sale: 1},
+                {product_no: 28, product_name: '딸기 선데이 아이스크림', price: 2200, product_img: './img/product/product_no28.png', is_sale: 1},
+                {product_no: 29, product_name: '초코 선데이 아이스크림', price: 2200, product_img: './img/product/product_no29.png', is_sale: 1},
+                {product_no: 30, product_name: '카라멜 선데이 아이스크림', price: 2200, product_img: './img/product/product_no30.png', is_sale: 1},
+                {product_no: 31, product_name: '맥너겟® 4조각', price: 2400, product_img: './img/product/product_no31.png', is_sale: 1},
+                {product_no: 32, product_name: '배 칠러', price: 2700, product_img: './img/product/product_no32.png', is_sale: 1},
+                {product_no: 33, product_name: '코카-콜라®', price: 2000, product_img: './img/product/product_no33.png', is_sale: 1},
+                {product_no: 34, product_name: '코카-콜라® 제로', price: 2000, product_img: './img/product/product_no34.png', is_sale: 1},
+                {product_no: 35, product_name: '환타®', price: 2000, product_img: './img/product/product_no35.png', is_sale: 1},
+                {product_no: 36, product_name: '스프라이트®', price: 2000, product_img: './img/product/product_no36.png', is_sale: 1},
+                {product_no: 37, product_name: '카페라떼', price: 3200, product_img: './img/product/product_no37.png', is_sale: 1},
+                {product_no: 38, product_name: '카푸치노', price: 3200, product_img: './img/product/product_no38.png', is_sale: 1},
+                {product_no: 39, product_name: '아메리카노', price: 2700, product_img: './img/product/product_no39.png', is_sale: 1},
+                {product_no: 40, product_name: '에스프레소', price: 2200, product_img: './img/product/product_no40.png', is_sale: 1},
+                {product_no: 41, product_name: '아이스 커피', price: 1700, product_img: './img/product/product_no41.png', is_sale: 1},
+                {product_no: 42, product_name: '아이스 아메리카노', price: 2700, product_img: './img/product/product_no42.png', is_sale: 1},
+                {product_no: 43, product_name: '아이스 카페라떼', price: 3200, product_img: './img/product/product_no43.png', is_sale: 1},
+                {product_no: 44, product_name: '딸기 쉐이크', price: 3200, product_img: './img/product/product_no44.png', is_sale: 1},
+                {product_no: 45, product_name: '초코 쉐이크', price: 3200, product_img: './img/product/product_no45.png', is_sale: 1},
+                {product_no: 46, product_name: '바닐라 쉐이크', price: 3200, product_img: './img/product/product_no46.png', is_sale: 1},
+                {product_no: 47, product_name: '프리미엄 로스트™', price: 2800, product_img: './img/product/product_no47.png', is_sale: 1},
+                {product_no: 48, product_name: '오렌지 주스 (캔)', price: 2500, product_img: './img/product/product_no48.png', is_sale: 1},
+                {product_no: 49, product_name: '우유', price: 2200, product_img: './img/product/product_no49.png', is_sale: 1},
+                {product_no: 50, product_name: '생수', price: 1900, product_img: './img/product/product_no50.png', is_sale: 1},
+                {product_no: 51, product_name: '케첩', price: 200, product_img: './img/product/product_no51.png', is_sale: 1},
+                {product_no: 52, product_name: '디핑 소스 스위트 앤 사워', price: 200, product_img: './img/product/product_no52.png', is_sale: 1},
+                {product_no: 53, product_name: '디핑 소스 스위트 칠리', price: 200, product_img: './img/product/product_no53.png', is_sale: 1},
+                {product_no: 54, product_name: '디핑 소스 케이준', price: 200, product_img: './img/product/product_no54.png', is_sale: 1},
+              ];
+
+              for (let i in PRODUCT) {
+                tx.executeSql(`INSERT INTO PRODUCT VALUES(?, ?, ?, ?, ?)`, [
+                  PRODUCT[i].product_no, PRODUCT[i].product_name, PRODUCT[i].price, PRODUCT[i].product_img, PRODUCT[i].is_sale
+                ]);
+              }
+            }
+          });
+
+          tx.executeSql(`
+            SELECT * FROM SET_PRODUCT
+          `, [], function(tx, res) {
+            if (res.rows.length === 0) {
+              const SET_PRODUCT = [
+                {set_no: 1, set_name: '단품', additional_price: 0, set_img: './img/set/set_no1.png'},
+                {set_no: 2, set_name: '세트', additional_price: 1800, set_img: './img/set/set_no2.png'},
+                {set_no: 3, set_name: '라지 세트', additional_price: 2600, set_img: './img/set/set_no3.png'},
+                {set_no: 4, set_name: '단품', additional_price: 0, set_img: './img/set/set_no4.png'},
+                {set_no: 5, set_name: '세트', additional_price: 1800, set_img: './img/set/set_no5.png'},
+                {set_no: 6, set_name: '라지 세트', additional_price: 2600, set_img: './img/set/set_no6.png'},
+                {set_no: 7, set_name: '단품', additional_price: 0, set_img: './img/set/set_no7.png'},
+                {set_no: 8, set_name: '세트', additional_price: 1500, set_img: './img/set/set_no8.png'},
+                {set_no: 9, set_name: '라지 세트', additional_price: 2100, set_img: './img/set/set_no9.png'},
+                {set_no: 10, set_name: '단품', additional_price: 0, set_img: './img/set/set_no10.png'},
+                {set_no: 11, set_name: '세트', additional_price: 1800, set_img: './img/set/set_no11.png'},
+                {set_no: 12, set_name: '라지 세트', additional_price: 2400, set_img: './img/set/set_no12.png'},
+                {set_no: 13, set_name: '단품', additional_price: 0, set_img: './img/set/set_no13.png'},
+                {set_no: 14, set_name: '세트', additional_price: 1500, set_img: './img/set/set_no14.png'},
+                {set_no: 15, set_name: '라지 세트', additional_price: 2100, set_img: './img/set/set_no15.png'},
+                {set_no: 16, set_name: '단품', additional_price: 0, set_img: './img/set/set_no16.png'},
+                {set_no: 17, set_name: '세트', additional_price: 1500, set_img: './img/set/set_no17.png'},
+                {set_no: 18, set_name: '라지 세트', additional_price: 2100, set_img: './img/set/set_no18.png'},
+                {set_no: 19, set_name: '단품', additional_price: 0, set_img: './img/set/set_no19.png'},
+                {set_no: 20, set_name: '세트', additional_price: 1700, set_img: './img/set/set_no20.png'},
+                {set_no: 21, set_name: '라지 세트', additional_price: 2300, set_img: './img/set/set_no21.png'},
+                {set_no: 22, set_name: '단품', additional_price: 0, set_img: './img/set/set_no22.png'},
+                {set_no: 23, set_name: '세트', additional_price: 1700, set_img: './img/set/set_no23.png'},
+                {set_no: 24, set_name: '라지 세트', additional_price: 2300, set_img: './img/set/set_no24.png'},
+                {set_no: 25, set_name: '단품', additional_price: 0, set_img: './img/set/set_no25.png'},
+                {set_no: 26, set_name: '세트', additional_price: 1100, set_img: './img/set/set_no26.png'},
+                {set_no: 27, set_name: '라지 세트', additional_price: 1700, set_img: './img/set/set_no27.png'},
+                {set_no: 28, set_name: '단품', additional_price: 0, set_img: './img/set/set_no28.png'},
+                {set_no: 29, set_name: '세트', additional_price: 1800, set_img: './img/set/set_no29.png'},
+                {set_no: 30, set_name: '라지 세트', additional_price: 2400, set_img: './img/set/set_no30.png'},
+                {set_no: 31, set_name: '단품', additional_price: 0, set_img: './img/set/set_no31.png'},
+                {set_no: 32, set_name: '세트', additional_price: 2200, set_img: './img/set/set_no32.png'},
+                {set_no: 33, set_name: '라지 세트', additional_price: 2800, set_img: './img/set/set_no33.png'},
+                {set_no: 34, set_name: '단품', additional_price: 0, set_img: './img/set/set_no34.png'},
+                {set_no: 35, set_name: '세트', additional_price: 1800, set_img: './img/set/set_no35.png'},
+                {set_no: 36, set_name: '라지 세트', additional_price: 2400, set_img: './img/set/set_no36.png'},
+                {set_no: 37, set_name: '단품', additional_price: 0, set_img: './img/set/set_no37.png'},
+                {set_no: 38, set_name: '세트', additional_price: 1700, set_img: './img/set/set_no38.png'},
+                {set_no: 39, set_name: '라지 세트', additional_price: 2300, set_img: './img/set/set_no39.png'},
+                {set_no: 40, set_name: '단품', additional_price: 0, set_img: './img/set/set_no40.png'},
+                {set_no: 41, set_name: '세트', additional_price: 1800, set_img: './img/set/set_no41.png'},
+                {set_no: 42, set_name: '라지 세트', additional_price: 2400, set_img: './img/set/set_no42.png'},
+                {set_no: 43, set_name: '단품', additional_price: 0, set_img: './img/set/set_no43.png'},
+                {set_no: 44, set_name: '세트', additional_price: 1800, set_img: './img/set/set_no44.png'},
+                {set_no: 45, set_name: '라지 세트', additional_price: 2400, set_img: './img/set/set_no45.png'},
+                {set_no: 46, set_name: '단품', additional_price: 0, set_img: './img/set/set_no46.png'},
+                {set_no: 47, set_name: '세트', additional_price: 2600, set_img: './img/set/set_no47.png'},
+                {set_no: 48, set_name: '라지 세트', additional_price: 3100, set_img: './img/set/set_no48.png'},
+                {set_no: 49, set_name: '단품', additional_price: 0, set_img: './img/set/set_no49.png'},
+                {set_no: 50, set_name: '세트', additional_price: 1600, set_img: './img/set/set_no50.png'},
+                {set_no: 51, set_name: '라지 세트', additional_price: 2200, set_img: './img/set/set_no51.png'},
+                {set_no: 52, set_name: '단품', additional_price: 0, set_img: './img/set/set_no52.png'},
+                {set_no: 53, set_name: '미디엄', additional_price: 0, set_img: './img/set/set_no53.png'},
+                {set_no: 54, set_name: '라지', additional_price: 700, set_img: './img/set/set_no54.png'},
+                {set_no: 55, set_name: '2조각', additional_price: 0, set_img: './img/set/set_no55.png'},
+                {set_no: 56, set_name: '4조각', additional_price: 1900, set_img: './img/set/set_no56.png'},
+                {set_no: 57, set_name: '2조각', additional_price: 0, set_img: './img/set/set_no57.png'},
+                {set_no: 58, set_name: '4조각', additional_price: 3200, set_img: './img/set/set_no58.png'},
+                {set_no: 59, set_name: '단품', additional_price: 0, set_img: './img/set/set_no59.png'},
+                {set_no: 60, set_name: '스몰', additional_price: 0, set_img: './img/set/set_no60.png'},
+                {set_no: 61, set_name: '미디엄', additional_price: 600, set_img: './img/set/set_no61.png'},
+                {set_no: 62, set_name: '라지', additional_price: 1300, set_img: './img/set/set_no62.png'},
+                {set_no: 63, set_name: '단품', additional_price: 0, set_img: './img/set/set_no63.png'},
+                {set_no: 64, set_name: '단품', additional_price: 0, set_img: './img/set/set_no64.png'},
+                {set_no: 65, set_name: '단품', additional_price: 0, set_img: './img/set/set_no65.png'},
+                {set_no: 66, set_name: '단품', additional_price: 0, set_img: './img/set/set_no66.png'},
+                {set_no: 67, set_name: '단품', additional_price: 0, set_img: './img/set/set_no67.png'},
+                {set_no: 68, set_name: '단품', additional_price: 0, set_img: './img/set/set_no68.png'},
+                {set_no: 69, set_name: '단품', additional_price: 0, set_img: './img/set/set_no69.png'},
+                {set_no: 70, set_name: '4조각', additional_price: 0, set_img: './img/set/set_no70.png'},
+                {set_no: 71, set_name: '6조각', additional_price: 1100, set_img: './img/set/set_no71.png'},
+                {set_no: 72, set_name: '10조각', additional_price: 2400, set_img: './img/set/set_no72.png'},
+                {set_no: 73, set_name: '스몰', additional_price: 0, set_img: './img/set/set_no73.png'},
+                {set_no: 74, set_name: '미디엄', additional_price: 500, set_img: './img/set/set_no74.png'},
+                {set_no: 75, set_name: '라지', additional_price: 1500, set_img: './img/set/set_no75.png'},
+                {set_no: 76, set_name: '미디엄', additional_price: 0, set_img: './img/set/set_no76.png'},
+                {set_no: 77, set_name: '라지', additional_price: 500, set_img: './img/set/set_no77.png'},
+                {set_no: 78, set_name: '미디엄', additional_price: 0, set_img: './img/set/set_no78.png'},
+                {set_no: 79, set_name: '라지', additional_price: 500, set_img: './img/set/set_no79.png'},
+                {set_no: 80, set_name: '미디엄', additional_price: 0, set_img: './img/set/set_no80.png'},
+                {set_no: 81, set_name: '라지', additional_price: 500, set_img: './img/set/set_no81.png'},
+                {set_no: 82, set_name: '미디엄', additional_price: 0, set_img: './img/set/set_no82.png'},
+                {set_no: 83, set_name: '라지', additional_price: 500, set_img: './img/set/set_no83.png'},
+                {set_no: 84, set_name: '스몰', additional_price: 0, set_img: './img/set/set_no84.png'},
+                {set_no: 85, set_name: '미디엄', additional_price: 500, set_img: './img/set/set_no85.png'},
+                {set_no: 86, set_name: '라지', additional_price: 800, set_img: './img/set/set_no86.png'},
+                {set_no: 87, set_name: '스몰', additional_price: 0, set_img: './img/set/set_no87.png'},
+                {set_no: 88, set_name: '미디엄', additional_price: 500, set_img: './img/set/set_no88.png'},
+                {set_no: 89, set_name: '라지', additional_price: 800, set_img: './img/set/set_no89.png'},
+                {set_no: 90, set_name: '스몰', additional_price: 0, set_img: './img/set/set_no90.png'},
+                {set_no: 91, set_name: '미디엄', additional_price: 500, set_img: './img/set/set_no91.png'},
+                {set_no: 92, set_name: '라지', additional_price: 1000, set_img: './img/set/set_no92.png'},
+                {set_no: 93, set_name: '스몰', additional_price: 0, set_img: './img/set/set_no93.png'},
+                {set_no: 94, set_name: '미디엄', additional_price: 500, set_img: './img/set/set_no94.png'},
+                {set_no: 95, set_name: '라지', additional_price: 1000, set_img: './img/set/set_no95.png'},
+                {set_no: 96, set_name: '미디엄', additional_price: 0, set_img: './img/set/set_no96.png'},
+                {set_no: 97, set_name: '라지', additional_price: 500, set_img: './img/set/set_no97.png'},
+                {set_no: 98, set_name: '미디엄', additional_price: 0, set_img: './img/set/set_no98.png'},
+                {set_no: 99, set_name: '라지', additional_price: 500, set_img: './img/set/set_no99.png'},
+                {set_no: 100, set_name: '미디엄', additional_price: 0, set_img: './img/set/set_no100.png'},
+                {set_no: 101, set_name: '라지', additional_price: 600, set_img: './img/set/set_no101.png'},
+                {set_no: 102, set_name: '단품', additional_price: 0, set_img: './img/set/set_no102.png'},
+                {set_no: 103, set_name: '단품', additional_price: 0, set_img: './img/set/set_no103.png'},
+                {set_no: 104, set_name: '단품', additional_price: 0, set_img: './img/set/set_no104.png'},
+                {set_no: 105, set_name: '단품', additional_price: 0, set_img: './img/set/set_no105.png'},
+                {set_no: 106, set_name: '단품', additional_price: 0, set_img: './img/set/set_no106.png'},
+                {set_no: 107, set_name: '단품', additional_price: 0, set_img: './img/set/set_no107.png'},
+                {set_no: 108, set_name: '단품', additional_price: 0, set_img: './img/set/set_no108.png'},
+                {set_no: 109, set_name: '단품', additional_price: 0, set_img: './img/set/set_no109.png'},
+                {set_no: 110, set_name: '단품', additional_price: 0, set_img: './img/set/set_no110.png'},
+                {set_no: 111, set_name: '단품', additional_price: 0, set_img: './img/set/set_no111.png'},
+                {set_no: 112, set_name: '단품', additional_price: 0, set_img: './img/set/set_no112.png'},
+              ];
+
+              for (let i in SET_PRODUCT) {
+                tx.executeSql(`INSERT INTO SET_PRODUCT VALUES(?, ?, ?, ?)`, [
+                  SET_PRODUCT[i].set_no, SET_PRODUCT[i].set_name, SET_PRODUCT[i].additional_price, SET_PRODUCT[i].set_img
+                ]);
+              }
+            }
+          });
+
+          tx.executeSql(`
+            SELECT * FROM ORDER_HISTORY
+          `, [], function(tx, res) {
+            if (res.rows.length === 0) {
+              const ORDER_HISTORY = [
+                {order_id: '202112010001', order_date: '2021-12-01 13:23:07', is_takeout: 1},
+                {order_id: '202112010002', order_date: '2021-12-01 14:13:36', is_takeout: 1},
+                {order_id: '202112010003', order_date: '2021-12-01 16:41:53', is_takeout: 0},
+                {order_id: '202112010004', order_date: '2021-12-01 17:09:51', is_takeout: 1},
+                {order_id: '202112020001', order_date: '2021-12-02 12:51:02', is_takeout: 0},
+                {order_id: '202112020002', order_date: '2021-12-02 13:32:31', is_takeout: 1},
+                {order_id: '202112020003', order_date: '2021-12-02 14:50:02', is_takeout: 0},
+                {order_id: '202112030001', order_date: '2021-12-03 13:16:50', is_takeout: 1},
+                {order_id: '202112030002', order_date: '2021-12-03 14:51:28', is_takeout: 0},
+                {order_id: '202112030003', order_date: '2021-12-03 15:31:46', is_takeout: 0},
+                {order_id: '202112030004', order_date: '2021-12-03 16:52:03', is_takeout: 0},
+                {order_id: '202112030005', order_date: '2021-12-03 17:31:25', is_takeout: 1},
+                {order_id: '202112040001', order_date: '2021-12-04 13:02:58', is_takeout: 0},
+                {order_id: '202112040002', order_date: '2021-12-04 14:16:46', is_takeout: 1},
+                {order_id: '202112040003', order_date: '2021-12-04 16:41:19', is_takeout: 1},
+                {order_id: '202112050001', order_date: '2021-12-05 13:41:36', is_takeout: 1},
+                {order_id: '202112050002', order_date: '2021-12-05 16:41:06', is_takeout: 0},
+              ];
+
+              for (let i in ORDER_HISTORY) {
+                tx.executeSql(`INSERT INTO ORDER_HISTORY VALUES(?, ?, ?)`, [
+                  ORDER_HISTORY[i].order_id, ORDER_HISTORY[i].order_date, ORDER_HISTORY[i].is_takeout
+                ]);
+              }
+            }
+          });
+
+
+          tx.executeSql(`
+            SELECT * FROM CATEGORIZATION
+          `, [], function(tx, res) {
+            if (res.rows.length === 0) {
+              const CATEGORIZATION = [
+                {product_no: 1, category_no: 1},
+                {product_no: 2, category_no: 1},
+                {product_no: 3, category_no: 1},
+                {product_no: 4, category_no: 1},
+                {product_no: 5, category_no: 1},
+                {product_no: 6, category_no: 1},
+                {product_no: 7, category_no: 1},
+                {product_no: 8, category_no: 1},
+                {product_no: 9, category_no: 1},
+                {product_no: 10, category_no: 1},
+                {product_no: 11, category_no: 1},
+                {product_no: 12, category_no: 1},
+                {product_no: 13, category_no: 1},
+                {product_no: 14, category_no: 1},
+                {product_no: 15, category_no: 1},
+                {product_no: 16, category_no: 1},
+                {product_no: 17, category_no: 1},
+                {product_no: 18, category_no: 1},
+                {product_no: 19, category_no: 2},
+                {product_no: 20, category_no: 2},
+                {product_no: 21, category_no: 2},
+                {product_no: 22, category_no: 2},
+                {product_no: 23, category_no: 2},
+                {product_no: 24, category_no: 2},
+                {product_no: 25, category_no: 2},
+                {product_no: 26, category_no: 4},
+                {product_no: 27, category_no: 2},
+                {product_no: 28, category_no: 4},
+                {product_no: 29, category_no: 4},
+                {product_no: 30, category_no: 4},
+                {product_no: 31, category_no: 4},
+                {product_no: 32, category_no: 3},
+                {product_no: 33, category_no: 3},
+                {product_no: 34, category_no: 3},
+                {product_no: 35, category_no: 3},
+                {product_no: 36, category_no: 3},
+                {product_no: 37, category_no: 5},
+                {product_no: 38, category_no: 5},
+                {product_no: 39, category_no: 5},
+                {product_no: 40, category_no: 5},
+                {product_no: 41, category_no: 5},
+                {product_no: 42, category_no: 5},
+                {product_no: 43, category_no: 5},
+                {product_no: 44, category_no: 5},
+                {product_no: 45, category_no: 5},
+                {product_no: 46, category_no: 5},
+                {product_no: 47, category_no: 5},
+                {product_no: 48, category_no: 5},
+                {product_no: 49, category_no: 3},
+                {product_no: 50, category_no: 3},
+                {product_no: 51, category_no: 6},
+                {product_no: 52, category_no: 6},
+                {product_no: 53, category_no: 6},
+                {product_no: 54, category_no: 6},
+              ];
+
+              for (let i in CATEGORIZATION) {
+                tx.executeSql(`INSERT INTO CATEGORIZATION VALUES(?, ?)`, [
+                  CATEGORIZATION[i].product_no, CATEGORIZATION[i].category_no
+                ]);
+              }
+            }
+          });
+
+          tx.executeSql(`
+            SELECT * FROM OPTION
+          `, [], function(tx, res) {
+            if (res.rows.length === 0) {
+              const OPTION = [
+                {set_no: 1, product_no: 1},
+                {set_no: 2, product_no: 1},
+                {set_no: 3, product_no: 1},
+                {set_no: 4, product_no: 2},
+                {set_no: 5, product_no: 2},
+                {set_no: 6, product_no: 2},
+                {set_no: 7, product_no: 3},
+                {set_no: 8, product_no: 3},
+                {set_no: 9, product_no: 3},
+                {set_no: 10, product_no: 4},
+                {set_no: 11, product_no: 4},
+                {set_no: 12, product_no: 4},
+                {set_no: 13, product_no: 5},
+                {set_no: 14, product_no: 5},
+                {set_no: 15, product_no: 5},
+                {set_no: 16, product_no: 6},
+                {set_no: 17, product_no: 6},
+                {set_no: 18, product_no: 6},
+                {set_no: 19, product_no: 7},
+                {set_no: 20, product_no: 7},
+                {set_no: 21, product_no: 7},
+                {set_no: 22, product_no: 8},
+                {set_no: 23, product_no: 8},
+                {set_no: 24, product_no: 8},
+                {set_no: 25, product_no: 9},
+                {set_no: 26, product_no: 9},
+                {set_no: 27, product_no: 9},
+                {set_no: 28, product_no: 10},
+                {set_no: 29, product_no: 10},
+                {set_no: 30, product_no: 10},
+                {set_no: 31, product_no: 11},
+                {set_no: 32, product_no: 11},
+                {set_no: 33, product_no: 11},
+                {set_no: 34, product_no: 12},
+                {set_no: 35, product_no: 12},
+                {set_no: 36, product_no: 12},
+                {set_no: 37, product_no: 13},
+                {set_no: 38, product_no: 13},
+                {set_no: 39, product_no: 13},
+                {set_no: 40, product_no: 14},
+                {set_no: 41, product_no: 14},
+                {set_no: 42, product_no: 14},
+                {set_no: 43, product_no: 15},
+                {set_no: 44, product_no: 15},
+                {set_no: 45, product_no: 15},
+                {set_no: 46, product_no: 16},
+                {set_no: 47, product_no: 16},
+                {set_no: 48, product_no: 16},
+                {set_no: 49, product_no: 17},
+                {set_no: 50, product_no: 17},
+                {set_no: 51, product_no: 17},
+                {set_no: 52, product_no: 18},
+                {set_no: 53, product_no: 19},
+                {set_no: 54, product_no: 19},
+                {set_no: 55, product_no: 20},
+                {set_no: 56, product_no: 20},
+                {set_no: 57, product_no: 21},
+                {set_no: 58, product_no: 21},
+                {set_no: 59, product_no: 22},
+                {set_no: 60, product_no: 23},
+                {set_no: 61, product_no: 23},
+                {set_no: 62, product_no: 23},
+                {set_no: 63, product_no: 24},
+                {set_no: 64, product_no: 25},
+                {set_no: 65, product_no: 26},
+                {set_no: 66, product_no: 27},
+                {set_no: 67, product_no: 28},
+                {set_no: 68, product_no: 29},
+                {set_no: 69, product_no: 30},
+                {set_no: 70, product_no: 31},
+                {set_no: 71, product_no: 31},
+                {set_no: 72, product_no: 31},
+                {set_no: 73, product_no: 32},
+                {set_no: 74, product_no: 32},
+                {set_no: 75, product_no: 32},
+                {set_no: 76, product_no: 33},
+                {set_no: 77, product_no: 33},
+                {set_no: 78, product_no: 34},
+                {set_no: 79, product_no: 34},
+                {set_no: 80, product_no: 35},
+                {set_no: 81, product_no: 35},
+                {set_no: 82, product_no: 36},
+                {set_no: 83, product_no: 36},
+                {set_no: 84, product_no: 37},
+                {set_no: 85, product_no: 37},
+                {set_no: 86, product_no: 37},
+                {set_no: 87, product_no: 38},
+                {set_no: 88, product_no: 38},
+                {set_no: 89, product_no: 38},
+                {set_no: 90, product_no: 39},
+                {set_no: 91, product_no: 39},
+                {set_no: 92, product_no: 39},
+                {set_no: 93, product_no: 40},
+                {set_no: 94, product_no: 40},
+                {set_no: 95, product_no: 40},
+                {set_no: 96, product_no: 41},
+                {set_no: 97, product_no: 41},
+                {set_no: 98, product_no: 42},
+                {set_no: 99, product_no: 42},
+                {set_no: 100, product_no: 43},
+                {set_no: 101, product_no: 43},
+                {set_no: 102, product_no: 44},
+                {set_no: 103, product_no: 45},
+                {set_no: 104, product_no: 46},
+                {set_no: 105, product_no: 47},
+                {set_no: 106, product_no: 48},
+                {set_no: 107, product_no: 49},
+                {set_no: 108, product_no: 50},
+                {set_no: 109, product_no: 51},
+                {set_no: 110, product_no: 52},
+                {set_no: 111, product_no: 53},
+                {set_no: 112, product_no: 54},
+              ];
+
+              for (let i in OPTION) {
+                tx.executeSql(`INSERT INTO OPTION VALUES(?, ?)`, [
+                  OPTION[i].set_no, OPTION[i].product_no
+                ]);
+              }
+            }
+          });
+
+
+          tx.executeSql(`
+            SELECT * FROM ORDERS
+          `, [], function(tx, res) {
+            if (res.rows.length === 0) {
+              const ORDERS = [
+                {order_id: '202112010001', set_no: 2, quantity: 1},
+                {order_id: '202112010001', set_no: 5, quantity: 1},
+                {order_id: '202112010002', set_no: 24, quantity: 2},
+                {order_id: '202112010003', set_no: 29, quantity: 1},
+                {order_id: '202112010003', set_no: 35, quantity: 1},
+                {order_id: '202112010003', set_no: 54, quantity: 1},
+                {order_id: '202112010003', set_no: 67, quantity: 1},
+                {order_id: '202112010003', set_no: 68, quantity: 1},
+                {order_id: '202112010004', set_no: 45, quantity: 1},
+                {order_id: '202112010004', set_no: 36, quantity: 1},
+                {order_id: '202112010004', set_no: 65, quantity: 2},
+                {order_id: '202112020001', set_no: 20, quantity: 2},
+                {order_id: '202112020002', set_no: 12, quantity: 1},
+                {order_id: '202112020002', set_no: 9, quantity: 1},
+                {order_id: '202112020003', set_no: 29, quantity: 1},
+                {order_id: '202112020003', set_no: 23, quantity: 1},
+                {order_id: '202112020003', set_no: 64, quantity: 2},
+                {order_id: '202112030001', set_no: 102, quantity: 1},
+                {order_id: '202112030001', set_no: 103, quantity: 1},
+                {order_id: '202112030001', set_no: 104, quantity: 2},
+                {order_id: '202112030002', set_no: 99, quantity: 4},
+                {order_id: '202112030002', set_no: 72, quantity: 2},
+                {order_id: '202112030003', set_no: 48, quantity: 2},
+                {order_id: '202112030003', set_no: 54, quantity: 1},
+                {order_id: '202112030004', set_no: 44, quantity: 2},
+                {order_id: '202112030004', set_no: 50, quantity: 1},
+                {order_id: '202112030005', set_no: 26, quantity: 1},
+                {order_id: '202112030005', set_no: 101, quantity: 1},
+                {order_id: '202112040001', set_no: 41, quantity: 2},
+                {order_id: '202112040001', set_no: 66, quantity: 4},
+                {order_id: '202112040002', set_no: 33, quantity: 1},
+                {order_id: '202112040003', set_no: 6, quantity: 1},
+                {order_id: '202112040003', set_no: 9, quantity: 1},
+                {order_id: '202112050001', set_no: 3, quantity: 2},
+                {order_id: '202112050001', set_no: 36, quantity: 1},
+                {order_id: '202112050002', set_no: 48, quantity: 1},
+                {order_id: '202112050002', set_no: 42, quantity: 1},
+                {order_id: '202112050002', set_no: 68, quantity: 1},
+                {order_id: '202112050002', set_no: 69, quantity: 1},
+              ];
+
+              for (let i in ORDERS) {
+                tx.executeSql(`INSERT INTO ORDERS VALUES(?, ?, ?)`, [
+                  ORDERS[i].order_id, ORDERS[i].set_no, ORDERS[i].quantity
+                ]);
+              }
+            }
+          });
+        },
+        function(error) {
+          console.log(error);
+        });
+      }
+
+      openDB();
+      // initTable();
+      createTable();
+      insertData();
+
+      // DB 관련 스크립트가 프론트엔드 상에 노출 안되도록 제거
+      // document.body.removeChild(document.querySelector('.DBscript-container'));
+    </script>
+  </div>
+</body>
+
+</html>

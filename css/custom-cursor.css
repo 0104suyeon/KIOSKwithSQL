@@ -1,0 +1,9 @@
+@charset 'utf-8';
+
+body, html {
+  cursor: url('../img/cursor.gif'), auto;
+}
+
+body:active {
+  cursor: url('../img/cursor-active.gif'), auto;
+}
